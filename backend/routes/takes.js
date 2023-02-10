@@ -9,5 +9,5 @@ router.post('/takes', createTakes);
 router.delete('/takes', deleteTakes);
 router.put('/takes', updateTakes);
 
-module.export = router;
+module.exports = router;
 

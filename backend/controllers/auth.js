@@ -1,9 +1,12 @@
 const jwt = require('jsonwebtoken')
+const pool = require("../db")
+const bcrypt = require("bcrypt")
 
 const checkAuth = (req, res, next) => {
   const token = req.headers['x-auth-token']
+  console.log(req.originalUrl)
   if (!token) return res.status(401).json({ message: 'Failed to authenticate' })
-  jwt.verify(token, process.env.JWT_PRIVATE, (err, data) => {
+  jwt.verify(token, "private", (err, data) => {
     if (err) return res.status(500).json({ message: 'Failed to authenticate' })
     console.log(data)
     req.user = { id: data.user }
@@ -13,10 +16,11 @@ const checkAuth = (req, res, next) => {
 
 const loginUser = async (req, res) => {
   try{
-
+    console.log(req.body)
     const { student_id, password} = req.body;
+    console.log(student_id)
     const user_credentials = await pool.query(
-        "SELECT ID, name, hashed_password  FROM student, user_password WHERE student.ID = user_password AND ID = $1;",
+        "SELECT student.ID, name, hashed_password  FROM student, user_password WHERE student.ID = user_password.ID AND student.ID = $1;",
         [student_id]
     )
     if (user_credentials.rows.length == 0){
@@ -30,25 +34,30 @@ const loginUser = async (req, res) => {
     const passwordValid = await bcrypt.compare(password, user_password);
 
     if (!passwordValid) {
-      return res.status(401).json("Password or Email is Incorrect.");
+      // res.send({message: "Password or userID is Incorrect."})
+      return res.status(401).json("Password or userID is Incorrect.");
+    }
+    const resp = {
+      accessToken : '',
+      user : {
+        id : user_id,
+        username : username
+      }
     }
 
-    req.session.user = user;
-    req.session.save();
-    // provide token
-     const token = jwtGenerator(user_id);
+    resp.accessToken = jwt.sign({ user: user_id }, "private", {
+      expiresIn: '3 days'
+    })
 
-     return res.json({name, token});
+     return res.status(200).json(resp);
   } catch(err) {
+    console.log(err)
     return res.status(500).send('Server Error');
   }
 }
 
-const logoutUser = async (req, res) => {
-  req.session.destroy();
-}
-
 
 module.exports = {
-  checkAuth
+  checkAuth,
+  loginUser
 }

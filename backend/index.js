@@ -1,16 +1,19 @@
 const express = require('express');
-const AppRouter = require('./routes/index')
 const app = express();
+const AppRouter = require('./routes/index')
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const bodyParser = require('body-parser');
+
+
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+const oneDay = 1000 * 60 * 60 * 24;
 
 app.use(cookieParser());
-app.use(session({
-        resave : true,
-        saveUninitialized: true,
-        secret : "secret"
-}));
 
 // Middleware
 app.use(express.json())
@@ -19,6 +22,6 @@ app.use(cors());
 app.use('/api/', AppRouter);
 
 
-app.listen(5000, ()=> {
-    console.log("server has started on port 5000");
+app.listen(3001, () => {
+    console.log("server has started on port 3001");
 });

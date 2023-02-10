@@ -6,7 +6,7 @@ const getCourseInfo = async (req, res) => {
         const course_id = req.params.course_id.replace("%20", " ");
         console.log(course_id)
         const courseInfo = await pool.query(
-            "SELECT title, credits FROM course WHERE course_id = $1;",
+            "SELECT course_id, title, credits FROM course WHERE course.course_id = $1;",
             [course_id]
         )
         const results = {};
