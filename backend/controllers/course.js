@@ -54,19 +54,19 @@ const getDepartmentCourses = async (req, res) => {
         const sem = result.rows[0].semester;
 
         const deptCourses = await pool.query(
-            'SELECT distinct A.course_id as course_id, B.title as title, B.credits as credits FROM section as A, course as B WHERE A.course_id=B.course_id AND A.dept_name = $1 AND A.year = $2 AND A.semester = $3;',
+            'SELECT distinct A.course_id as course_id, B.title as title, B.credits as credits FROM section as A, course as B WHERE A.course_id=B.course_id AND B.dept_name = $1 AND A.year = $2 AND A.semester = $3;',
             [deptName, year, sem]
         )
         const results = [];
         deptCourses.rows.forEach((dept_course) => {
-            result = {};
+            let result = {};
             result.course_id = dept_course.course_id;
             result.title = dept_course.title;
             result.credits = dept_course.credits;
             results.push(result);
         });
 
-        return res.status(200).json(result);
+        return res.status(200).json(results);
     } catch (err) {
         return res
             .status(500)
