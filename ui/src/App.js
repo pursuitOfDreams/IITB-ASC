@@ -11,7 +11,7 @@ import { Paper } from '@mui/material';
 import Course from './components/course';
 import DeptInstructors from './components/dept_instr';
 import Instructor from './components/instructor';
-import SignIn from './components/login';
+import SignIn, { SignOut } from './components/login';
 import Registration from './components/registration';
 
 function App() {
@@ -20,6 +20,7 @@ function App() {
       <ResponsiveAppBar />
       <Routes>
         <Route path='/login' element= {<SignIn />} />
+        <Route path='/logout' element= {<SignOut />} />
         <Route path='/home' element= {<Home />} />
         <Route path='/home/registration' element={<Registration />} />
         <Route path='/departments' element= {<InstrDepartments />} />

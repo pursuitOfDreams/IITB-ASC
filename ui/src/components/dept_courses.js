@@ -8,9 +8,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-
+import {useState, useEffect} from 'react';
+import Axios from "axios";
+Axios.defaults.withCredentials = true;
 
 function createData(
     name: string,
@@ -32,45 +34,67 @@ const rows = [
 
 
 function DepartmentCourses() {
+
     const { dept_name } = useParams();
+    const navigate = useNavigate();
+
+    console.log(dept_name)
+    
+    useEffect( ()=>{
+        if(localStorage.getItem("auth")=='false'){
+            navigate("/login", {replace:true})
+        }
+    })
+
+    const [deptcourses , setdeptCourses] = useState("");
+    const [haveData, sethaveData] = useState(false);
+
+    useEffect(()=>{
+        Axios.get(`http://localhost:3001/api/running/${dept_name}`).then((response) =>{
+            setdeptCourses(response.data)
+            console.log(response.data)
+            sethaveData(true);
+        },)
+    }, [])
+
+    
     return (
         <div>
+            {
+                !haveData ? <div> Loading.. </div>
+                : 
 
             <div className="departments">
                 <Box style={{ marginTop: "30px" }}>
-                    Past Courses
+                    {dept_name} Courses
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Dessert (100g serving)</TableCell>
-                                    <TableCell align="right">Calories</TableCell>
-                                    <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                                    <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                                    <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                                    <TableCell align="left">Course ID</TableCell>
+                                    <TableCell>Course Name</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rows.map((row) => (
-                                    
-                                        <TableRow
-                                            key={row.name}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                <Link style={{textDecoration : "none", color : "black"}} to={`/course/${row.name}`}>{row.name}</Link>
-                                            </TableCell>
-                                            <TableCell align="right">{row.calories}</TableCell>
-                                            <TableCell align="right">{row.fat}</TableCell>
-                                            <TableCell align="right">{row.carbs}</TableCell>
-                                            <TableCell align="right">{row.protein}</TableCell>
-                                        </TableRow>
+                                {deptcourses.map((row) => (
+                                    <TableRow
+                                        key={row.course_id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell align="left" component="th" scope="row">
+                                            <Link to={`/course/${row.course_id}`}>
+                                                {row.course_id}
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell >{row.title}</TableCell>
+                                    </TableRow>
                                 ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </Box>
             </div>
+            }
 
         </div>
     );

@@ -6,7 +6,7 @@ const getCourseInfo = async (req, res) => {
         const course_id = req.params.course_id.replace("%20", " ");
         console.log(course_id)
         const courseInfo = await pool.query(
-            "SELECT course_id, title, credits FROM course WHERE course.course_id = $1;",
+            "SELECT course_id, title, dept_name, credits FROM course WHERE course.course_id = $1;",
             [course_id]
         )
         const results = {};
@@ -22,7 +22,7 @@ const getCourseInfo = async (req, res) => {
             results.course_prereq.push(prereq);
         });
         const courseInstructor = await pool.query(
-            "SELECT ID, name, dept_name, semester, year FROM teaches as T NATURAL JOIN instructor as I WHERE course_id = $1;",
+            "SELECT distinct(ID), name, dept_name, semester, year FROM teaches as T NATURAL JOIN instructor as I WHERE course_id = $1;",
             [course_id]
         )
         results.course_instructors = [];

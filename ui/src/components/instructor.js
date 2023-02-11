@@ -12,7 +12,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import {Link,useNavigate} from "react-router-dom";
+import Axios from "axios";
+import {useState, useEffect} from "react";
+import {useParams} from "react-router"
 
+Axios.defaults.withCredentials = true;
 
 function createData(
     name: string,
@@ -32,31 +37,56 @@ const rows = [
     createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-const card = (
-    <React.Fragment>
-        <CardContent>
-            <Typography variant="h5" component="div">
-                Bernard Menezes
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                12345
-            </Typography>
-            <Typography variant="body2">
-                Computer Science and Engineering
-            </Typography>
-        </CardContent>
-    </React.Fragment>
-);
 
 function Instructor() {
+    const { instructor_id } = useParams();
+    const navigate = useNavigate();
+
+    console.log(instructor_id)
+    
+    useEffect( ()=>{
+        if(localStorage.getItem("auth")=='false'){
+            navigate("/login", {replace:true})
+        }
+    })
+
+    const [instrInfo , setinstrInfo] = useState("");
+    const [haveData, sethaveData] = useState(false);
+
+    useEffect(()=>{
+        Axios.get(`http://localhost:3001/api/instructor/${instructor_id}`).then((response) =>{
+            setinstrInfo(response.data)
+            console.log(response.data)
+            sethaveData(true);
+        },)
+    }, [])
+
     return (
         <div>
+            {
+                !haveData ? <div> Loading.. </div>
+                :
+
             <div className="Home" >
                 <Grid container spacing={2}>
                     <Grid xs={4}>
                         <Box style={{ paddingLeft: "30px", paddingRight: "30px" }}>
                             <Box >
-                                <Card variant="outlined">{card}</Card>
+                                <Card variant="outlined">
+                                    <React.Fragment>
+                                        <CardContent>
+                                            <Typography variant="h5" component="div">
+                                                {instrInfo.instructorInfo[0].name}
+                                            </Typography>
+                                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                                {instrInfo.instructorInfo[0].id}
+                                            </Typography>
+                                            <Typography variant="body2">
+                                                {instrInfo.instructorInfo[0].dept_name}
+                                            </Typography>
+                                        </CardContent>
+                                    </React.Fragment>
+                                </Card>
                             </Box>
                         </Box>
                     </Grid>
@@ -67,26 +97,20 @@ function Instructor() {
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Dessert (100g serving)</TableCell>
-                                            <TableCell align="right">Calories</TableCell>
-                                            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                                            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                                            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                                            <TableCell>CourseID</TableCell>
+                                            <TableCell >Course name</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {rows.map((row) => (
+                                        {instrInfo.pastCourses.map((row) => (
                                             <TableRow
-                                                key={row.name}
+                                                key={row.course_id}
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                             >
                                                 <TableCell component="th" scope="row">
-                                                    {row.name}
+                                                <Link to={`/course/${row.course_id}`}>{row.course_id}</Link>
                                                 </TableCell>
-                                                <TableCell align="right">{row.calories}</TableCell>
-                                                <TableCell align="right">{row.fat}</TableCell>
-                                                <TableCell align="right">{row.carbs}</TableCell>
-                                                <TableCell align="right">{row.protein}</TableCell>
+                                                <TableCell>{row.title}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -99,26 +123,20 @@ function Instructor() {
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Dessert (100g serving)</TableCell>
-                                            <TableCell align="right">Calories</TableCell>
-                                            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                                            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                                            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                                            <TableCell>CourseID</TableCell>
+                                            <TableCell >Course name</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {rows.map((row) => (
+                                        {instrInfo.pastCourses.map((row) => (
                                             <TableRow
-                                                key={row.name}
+                                                key={row.course_id}
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                             >
                                                 <TableCell component="th" scope="row">
-                                                    {row.name}
+                                                <Link to={`/course/${row.course_id}`}>{row.course_id}</Link>
                                                 </TableCell>
-                                                <TableCell align="right">{row.calories}</TableCell>
-                                                <TableCell align="right">{row.fat}</TableCell>
-                                                <TableCell align="right">{row.carbs}</TableCell>
-                                                <TableCell align="right">{row.protein}</TableCell>
+                                                <TableCell>{row.title}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -130,14 +148,7 @@ function Instructor() {
 
 
             </div>
-            {/* <Paper sx={{
-                marginTop: 'calc(10% + 60px)',
-                position: 'fixed',
-                bottom: 0,
-                width: '100%'
-            }} square variant="outlined">
-                <Footer />
-            </Paper> */}
+            }
         </div>
     );
 }

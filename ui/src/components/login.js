@@ -4,29 +4,18 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-// import Link from '@mui/material/Link';
-import { Link,useNavigate,Navigate } from 'react-router-dom'
+
+import { useNavigate,Navigate } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from "axios";
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
-function Copyright(props) {
 
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+Axios.defaults.withCredentials = true;
 
 const theme = createTheme();
 
@@ -34,31 +23,33 @@ const theme = createTheme();
 export default function SignIn() {
   
   const [login , setLogin] = useState(false);
-  const navigte = useNavigate(); 
+  const navigate = useNavigate(); 
   
   const [userID, setuserID] = useState("");
   const [pass, setPass] = useState("");
 
+  useEffect( () => {
+    if(localStorage.getItem("auth")===true){
+      navigate("/home", {replace: true})
+    }
+  })  
+
   const [loginStatus, setloginStatus] = useState("");
   const handleSubmit = (event) => {
     event.preventDefault();
-
 
     Axios.post("http://localhost:3001/api/auth/login", {
       student_id: userID,
       password: pass
     }).then((response) => {
  
-      if(response.data.message){
+      if(response.status === 401){
         setloginStatus(response.data.message)
       }
       else{
-        localStorage.setItem("token", JSON.stringify(response.data['accessToken'] ))
         setLogin(true)
-        console.log(response.data['accessToken'])
-        // console.log(login)
         setloginStatus("Logged in")
-        // navigte("/home", {replace:true})
+        localStorage.setItem("auth", true)
       }
       console.log(response.data)
     })
@@ -122,8 +113,21 @@ export default function SignIn() {
         <div>
           {loginStatus}
         </div>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
 }
+
+
+export function SignOut(){
+
+  const navigate = useNavigate();
+  
+  useEffect(()=>{
+    Axios.get("http:/localhost:3001/api/auth/logout")
+    localStorage.setItem("auth", false);
+    navigate("/login", {replace: true})
+  })
+
+}
+  

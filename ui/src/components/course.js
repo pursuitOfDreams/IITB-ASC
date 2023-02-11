@@ -12,8 +12,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import Axios from "axios";
+import {useState, useEffect} from "react";
+import {useParams} from "react-router"
 
+Axios.defaults.withCredentials = true;
 
 function createData(
     name: string,
@@ -33,33 +37,30 @@ const rows = [
     createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-const courseInfo = (params) => {
-    return (
-        <React.Fragment>
-            <CardContent>
-                <Typography variant="h5" component="div">
-                    CS-101
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    Computer Programming
-                </Typography>
-                <Typography variant="body2">
-                    Computer Science and Engineering
-                </Typography>
-                <Typography component="div">
-                    Credits: 6
-                </Typography>
-                <Typography component="div">
-                    Venue: New CSE
-                </Typography>
-            </CardContent>
-        </React.Fragment>
-    )
-}
 
+function Course(params) {
+    const {course_id} = useParams();
+    const navigate = useNavigate();
 
+    console.log(course_id)
+    
+    useEffect( ()=>{
+        if(localStorage.getItem("auth")=='false'){
+            navigate("/login", {replace:true})
+        }
+    })
 
-function Course() {
+    const [coursedat , setcourseInfo] = useState("");
+    const [haveData, sethaveData] = useState(false);
+
+    useEffect(()=>{
+        Axios.get(`http://localhost:3001/api/course/${course_id}`).then((response) =>{
+            setcourseInfo(response.data)
+            console.log(response.data)
+            sethaveData(true);
+        },)
+    }, [])
+
     const prereqs = [
         { course_id: "CS-151" },
         { course_id: "CS-354" },
@@ -68,12 +69,33 @@ function Course() {
     ]
     return (
         <div>
+            {
+                !haveData ? <div> Loafing... </div>
+                :
+
             <div className="Course" >
                 <Grid container spacing={2}>
                     <Grid xs={12}>
                         <Box style={{ paddingLeft: "30px", paddingRight: "30px" }}>
                             <Box >
-                                <Card variant="outlined">{courseInfo({})}</Card>
+                                <Card variant="outlined">
+                                <React.Fragment>
+                                    <CardContent>
+                                        <Typography variant="h5" component="div">
+                                            {coursedat.courseInfo[0].course_id}
+                                        </Typography>
+                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                            {coursedat.courseInfo[0].title}
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            {coursedat.courseInfo[0].dept_name} 
+                                        </Typography>
+                                        <Typography component="div">
+                                            Credits: {coursedat.courseInfo[0].credits}
+                                        </Typography>
+                                    </CardContent>
+                                </React.Fragment>
+                                </Card>
                             </Box>
                             <Box style={{ marginTop: "30px" }}>
                                 <TableContainer component={Paper}>
@@ -84,13 +106,13 @@ function Course() {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {prereqs.map((row) => (
+                                            {coursedat.course_prereq.map((row) => (
                                                 <TableRow
-                                                    key={row.course_id}
+                                                    key={row.prereq_id}
                                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                 >
                                                     <TableCell align='center' component="th" scope="row">
-                                                        <Link style={{ textDecoration: "none", color: "black" }} to={`/course/${row.course_id}`}>{row.course_id}</Link>
+                                                        <Link style={{ textDecoration: "none", color: "black" }} to={`/course/${row.prereq_id}`}>{row.prereq_id}</Link>
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -105,31 +127,31 @@ function Course() {
                 <Grid container spacing={2}>
                     <Grid style={{ marginTop: "50px" }} xs={12}>
                         <Box style={{ paddingLeft: "30px", paddingRight: "30px" }}>
-                            Current Courses
+                            Instructors
                             <TableContainer component={Paper}>
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Dessert (100g serving)</TableCell>
-                                            <TableCell align="right">Calories</TableCell>
-                                            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                                            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                                            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                                            <TableCell>ID</TableCell>
+                                            <TableCell align="right">Name</TableCell>
+                                            <TableCell align="right">Department</TableCell>
+                                            <TableCell align="right">Semester</TableCell>
+                                            <TableCell align="right">Year</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {rows.map((row) => (
+                                        {coursedat.course_instructors.map((row) => (
                                             <TableRow
-                                                key={row.name}
+                                                key={row.id}
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                             >
                                                 <TableCell component="th" scope="row">
-                                                    <Link style={{textDecoration: "none", color : "black"}} to={`/instructor/${row.name}`}>{row.name}</Link>
+                                                    <Link style={{textDecoration: "none", color : "black"}} to={`/instructor/${row.id}`}>{row.id}</Link>
                                                 </TableCell>
-                                                <TableCell align="right">{row.calories}</TableCell>
-                                                <TableCell align="right">{row.fat}</TableCell>
-                                                <TableCell align="right">{row.carbs}</TableCell>
-                                                <TableCell align="right">{row.protein}</TableCell>
+                                                <TableCell align="right">{row.name}</TableCell>
+                                                <TableCell align="right">{row.dept_name}</TableCell>
+                                                <TableCell align="right">{row.semester}</TableCell>
+                                                <TableCell align="right">{row.year}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -141,6 +163,7 @@ function Course() {
 
 
             </div>
+            }
         </div>
     );
 }
