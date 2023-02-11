@@ -1,10 +1,10 @@
 const { Pool } = require("pg");
 
 const pool = new Pool({
-    user: 'postgres',
+    user: 'viditgoel',
     host: 'localhost',
     database: 'iitbasc',
-    password: '1234',
+    password: 'vidit123',
     port: 5432,
 });
 

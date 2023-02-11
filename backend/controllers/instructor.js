@@ -1,13 +1,21 @@
 const pool = require("../db")
 
-const getDepartmentInstructors = async (rq, res) =>{
+const getDeptInstr = async (req,res) =>{
     try{
-        return res.status(200).json({})
-    } catch (err){
+        dept_name = req.params.dept_name
+        console.log('a', dept_name)
+        const courseList = await pool.query(
+            "select ID, name from instructor where dept_name=$1;",
+            [dept_name]
+        )
+        const result = courseList.rows;
+        return res.status(200).json(result);
+
+    } catch(err){
+        console.log(err)
         return res
                 .status(500)
                 .json({ message: ' There was an error while fetching istructor info. Please try again later.' })
-                
     }
 }
 const getInstructorInfo = async (req, res) => {
@@ -41,5 +49,6 @@ const getInstructorInfo = async (req, res) => {
 }
 
 module.exports = {
-    getInstructorInfo
+    getInstructorInfo,
+    getDeptInstr
 }

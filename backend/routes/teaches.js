@@ -12,4 +12,4 @@ router.post('/teaches', createTeaches);
 router.delete('/teaches', deleteTeaches);
 router.put('/teaches', updateTeaches);
 
-module.export = router;
+module.exports = router;
