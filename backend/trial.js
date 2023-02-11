@@ -1,4 +1,17 @@
-const bcrypt = require('bcrypt');
-const pass = "abcd";
-const passwordValid = bcrypt.compareSync(pass, "fc4b5fd6816f75a7c81fc8eaa9499d6a299bd803397166e8c4cf9280b801d62c");
-console.log(passwordValid)
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+var date = yyyy + '-' + mm + '-' + dd;
+
+const pool = require("./db")
+const f = async () => {
+    const result = await pool.query(
+        "SELECT * FROM reg_dates WHERE start_time <= $1  ORDER BY start_time DESC;",
+        [today]
+    )
+    
+    console.log(result.rows[0])
+}
+

@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom';
 
 Axios.defaults.withCredentials = true;
 
-const pages = ['courses', 'instructor'];
+const pages = ['courses', 'instructor', 'registration'];
 const settings = ['Logout'];
 
 function ResponsiveAppBar() {
@@ -131,10 +131,9 @@ function ResponsiveAppBar() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page==="courses" 
-                    ? <Link style = {{ textDecoration : "none", color : "white"}} to="/course/running"> {page} </Link>
-                    : <Link style = {{ textDecoration : "none", color : "white"}} to="/departments">{page} </Link>
-                }
+                {page==="courses" && <Link style = {{ textDecoration : "none", color : "white"}} to="/course/running"> {page} </Link>}
+                {page==="instructor" && <Link style = {{ textDecoration : "none", color : "white"}} to="/departments"> {page} </Link>}
+                {page==="registration" && <Link style = {{ textDecoration : "none", color : "white"}} to="/home/registration"> {page} </Link> }
               </Button>
             ))}
           </Box>

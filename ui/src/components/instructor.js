@@ -102,7 +102,7 @@ function Instructor() {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {instrInfo.pastCourses.map((row) => (
+                                        {instrInfo.currentCourses.map((row) => (
                                             <TableRow
                                                 key={row.course_id}
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

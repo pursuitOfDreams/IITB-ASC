@@ -47,7 +47,7 @@ function InstrDepartments() {
     const [ haveData, sethaveData ] = React.useState(false);
 
     React.useEffect( ()=> {
-        axios.get("http://localhost:3001/api/running").then((response) => {
+        axios.get("http://localhost:3001/api/instructor/instrDept").then((response) => {
             console.log(response.data)
             setdeptlist(response.data)
             sethaveData(true)

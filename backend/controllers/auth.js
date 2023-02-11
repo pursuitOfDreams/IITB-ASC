@@ -1,20 +1,13 @@
-const jwt = require('jsonwebtoken')
 const pool = require("../db")
 const bcrypt = require("bcrypt")
 
 const checkAuth = (req, res, next) => {
   if(req.session.isLoggedin){
-
+    next();
   }
-  const token = req.headers['x-auth-token']
-  console.log(req.originalUrl)
-  if (!token) return res.status(401).json({ message: 'Failed to authenticate' })
-  jwt.verify(token, "private", (err, data) => {
-    if (err) return res.status(500).json({ message: 'Failed to authenticate' })
-    console.log(data)
-    req.user = { id: data.user }
-    next()
-  })
+  else{
+    return res.status(401).json({ message: 'Failed to authenticate' })
+  }
 }
 
 const loginUser = async (req, res) => {
@@ -37,12 +30,9 @@ const loginUser = async (req, res) => {
       return res.status(401).json("Password or userID is Incorrect.");
     }
 
-    console.log('a', req.session)
-
     req.session.isLoggedin = true
     req.session.uID = user_id
 
-    console.log('b', req.session)
 
     return req.session.save((err)=>{
       console.log(err),
@@ -56,6 +46,7 @@ const loginUser = async (req, res) => {
 
 const logout = async (req,res) => {
   req.session.isLoggedin = false
+  req.session.destroy()
   return 
 }
 

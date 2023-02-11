@@ -50,7 +50,7 @@ function DepartmentCourses() {
     const [haveData, sethaveData] = useState(false);
 
     useEffect(()=>{
-        Axios.get(`http://localhost:3001/api/running/${dept_name}`).then((response) =>{
+        Axios.get(`http://localhost:3001/api/course/running/${dept_name}`).then((response) =>{
             setdeptCourses(response.data)
             console.log(response.data)
             sethaveData(true);

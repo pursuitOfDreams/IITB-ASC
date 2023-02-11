@@ -2,9 +2,12 @@ const express = require('express');
 const router = express.Router();
 const {
     getInstructorInfo,
-    getDeptInstr
+    getDeptInstr,
+    getInstructorDepartments
 } = require('../controllers/instructor');
 
+
+// router.get('/instrDept', getInstructorDepartments)
 router.get('/:instructor_id', getInstructorInfo);
 
 

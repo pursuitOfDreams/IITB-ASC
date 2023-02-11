@@ -1,10 +1,12 @@
 const pool = require("../db");
+const { getCurrentSem } = require("./utils")
+
 
 // /course/:course_id
 const getCourseInfo = async (req, res) => {
-    try{
+    try {
         const course_id = req.params.course_id.replace("%20", " ");
-        console.log(course_id)
+        // console.log(course_id)
         const courseInfo = await pool.query(
             "SELECT course_id, title, dept_name, credits FROM course WHERE course.course_id = $1;",
             [course_id]
@@ -16,9 +18,9 @@ const getCourseInfo = async (req, res) => {
             "SELECT prereq_id FROM prereq WHERE course_id = $1",
             [course_id]
         );
-        console.log(courseInfo)
+        // console.log(courseInfo)
         results.course_prereq = [];
-        coursePrereq.rows.forEach((prereq) =>{
+        coursePrereq.rows.forEach((prereq) => {
             results.course_prereq.push(prereq);
         });
         const courseInstructor = await pool.query(
@@ -29,21 +31,31 @@ const getCourseInfo = async (req, res) => {
         courseInstructor.rows.forEach((inst) => {
             results.course_instructors.push(inst);
         });
-        
+
         return res.status(200).json(results);
-    } catch(err){
+    } catch (err) {
         console.log(err)
         return res
-                .status(500)
-                .json({message : ' There was an error while fetching course info. Please try again later.'});
+            .status(500)
+            .json({ message: ' There was an error while fetching course info. Please try again later.' });
     }
 }
+
 const getDepartmentCourses = async (req, res) => {
     const deptName = req.params.dept_id;
 
     try {
+        var today = new Date();
+        const result = await pool.query(
+            "SELECT * FROM reg_dates WHERE start_time <= $1  ORDER BY start_time DESC;",
+            [today]
+        );
+        const year = result.rows[0].year;
+        const sem = result.rows[0].semester;
+
         const deptCourses = await pool.query(
-            'SELECT * FROM course WHERE dept_name = $1;',[deptName]
+            'SELECT distinct A.course_id as course_id, B.title as title, B.credits as credits FROM section as A, course as B WHERE A.course_id=B.course_id AND A.dept_name = $1 AND A.year = $2 AND A.semester = $3;',
+            [deptName, year, sem]
         )
         const results = [];
         deptCourses.rows.forEach((dept_course) => {
@@ -55,14 +67,55 @@ const getDepartmentCourses = async (req, res) => {
         });
 
         return res.status(200).json(result);
-    } catch(err) {
+    } catch (err) {
         return res
-                .status(500)
-                .json({message : ' There was an error while fetching department courses. Please try again later.'});
+            .status(500)
+            .json({ message: ' There was an error while fetching department courses. Please try again later.' });
+    }
+}
+
+
+const getAllRunningCourses = async (req, res) => {
+    try {
+        var today = new Date();
+        const result = await pool.query(
+            "SELECT * FROM reg_dates WHERE start_time <= $1  ORDER BY start_time DESC;",
+            [today]
+        );
+        const year = result.rows[0].year;
+        const sem = result.rows[0].semester;
+
+        const runningCourses = await pool.query(
+            'SELECT A.course_id as course_id, B.title as title, B.credits as credits, A.sec_id FROM section as A, course as B WHERE A.course_id=B.course_id AND A.year = $1 AND A.semester = $2;',
+            [ year, sem]
+        )
+        const results = [];
+        var courseToSecMap = {};
+        runningCourses.rows.forEach((course) => {
+            let result={}
+            result.course_id = course.course_id;
+            result.title = course.title;
+            result.credits = course.credits;
+            result.sec_id = course.sec_id;
+            results.push(result);
+        });
+
+        
+        // for(let i=0; i<results.length; i++){
+
+        // }
+
+        return res.status(200).json(results);
+    } catch (err) {
+
+        return res
+            .status(500)
+            .json({ message: ' There was an error while fetching department courses. Please try again later.' });
     }
 }
 
 module.exports = {
     getDepartmentCourses,
-    getCourseInfo
+    getCourseInfo,
+    getAllRunningCourses
 }
