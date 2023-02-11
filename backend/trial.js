@@ -15,4 +15,3 @@ const f = async () => {
     console.log(result.rows[0])
 }
 
-f()

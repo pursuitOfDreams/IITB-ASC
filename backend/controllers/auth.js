@@ -30,12 +30,9 @@ const loginUser = async (req, res) => {
       return res.status(401).json("Password or userID is Incorrect.");
     }
 
-    console.log('a', req.session)
-
     req.session.isLoggedin = true
     req.session.uID = user_id
 
-    console.log('b', req.session)
 
     return req.session.save((err)=>{
       console.log(err),

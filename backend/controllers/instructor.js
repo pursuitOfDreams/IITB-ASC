@@ -3,7 +3,7 @@ const pool = require("../db")
 const getDeptInstr = async (req,res) =>{
     try{
         dept_name = req.params.dept_name
-        console.log('a', dept_name)
+        // console.log('a', dept_name)
         const courseList = await pool.query(
             "select ID, name from instructor where dept_name=$1;",
             [dept_name]
@@ -21,7 +21,7 @@ const getDeptInstr = async (req,res) =>{
 const getInstructorInfo = async (req, res) => {
     try{
         const instructorId = req.params.instructor_id;
-        console.log(instructorId);
+        // console.log(instructorId);
         const instructorInfo = await pool.query(
             "SELECT * FROM instructor WHERE ID = $1;", [instructorId]
         )
@@ -34,7 +34,7 @@ const getInstructorInfo = async (req, res) => {
         results.instructorInfo = instructorInfo.rows;
         results.pastCourses = []
         instructorPastCourses.rows.forEach((course) => {
-            console.log(course)
+            // console.log(course)
             results.pastCourses.push(course);
         });
         return res
