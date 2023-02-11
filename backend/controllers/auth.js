@@ -4,17 +4,11 @@ const bcrypt = require("bcrypt")
 
 const checkAuth = (req, res, next) => {
   if(req.session.isLoggedin){
-
+    next();
   }
-  const token = req.headers['x-auth-token']
-  console.log(req.originalUrl)
-  if (!token) return res.status(401).json({ message: 'Failed to authenticate' })
-  jwt.verify(token, "private", (err, data) => {
-    if (err) return res.status(500).json({ message: 'Failed to authenticate' })
-    console.log(data)
-    req.user = { id: data.user }
-    next()
-  })
+  else{
+    return res.status(401).json({ message: 'Failed to authenticate' })
+  }
 }
 
 const loginUser = async (req, res) => {
