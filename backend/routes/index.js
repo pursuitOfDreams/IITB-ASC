@@ -12,12 +12,12 @@ router.use('/auth', (req, res, next) => {
     console.log('Request URL:', req.originalUrl)
     next()
   }, authRouter);
-router.use('/course', courseRouter);
+router.use('/course',checkAuth, courseRouter);
 // router.use('/student', studentRouter);
-router.use('/student', getStudentInfo);
-router.use('/instructor', instructorRouter);
-router.get('/dept_instructors/:dept_name', getDeptInstr);
-router.use('/', departmentRouter);
+router.use('/student', checkAuth, getStudentInfo);
+router.use('/instructor', checkAuth, instructorRouter);
+router.get('/dept_instructors/:dept_name', checkAuth, getDeptInstr);
+router.use('/', checkAuth, departmentRouter);
 
 
 module.exports = router;
