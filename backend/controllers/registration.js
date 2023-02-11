@@ -1,5 +1,4 @@
 const pool = require("../db")
-const getCurrentSem = require("./utils")
 
 const register_course = async (req, res) => {
     try {

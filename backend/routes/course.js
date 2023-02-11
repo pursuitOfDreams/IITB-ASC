@@ -7,6 +7,7 @@ const {
 } = require("../controllers/course");
 const { getDepartments } = require('../controllers/department');
 
+router.get('/currentCourses', getAllRunningCourses);
 router.get('/running', getDepartments);
 router.get('/running/:dept_id', getDepartmentCourses)
 router.get('/:course_id/', getCourseInfo);

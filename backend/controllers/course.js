@@ -89,18 +89,29 @@ const getAllRunningCourses = async (req, res) => {
             'SELECT A.course_id as course_id, B.title as title, B.credits as credits, A.sec_id FROM section as A, course as B WHERE A.course_id=B.course_id AND A.year = $1 AND A.semester = $2;',
             [ year, sem]
         )
-        const results = [];
+        const results = {
+            course_ids : [],
+            titles : [],
+            credits : [],
+            sec_ids : []
+        };
+        var courseToSecMap = {};
         runningCourses.rows.forEach((course) => {
-            result = {};
-            result.course_id = course.course_id;
-            result.title = course.title;
-            result.credits = course.credits;
-            result.sec_id = course.sec_id;
-            results.push(result);
+            let result={}
+            results.course_ids.push(course.course_id);
+            results.titles.push(course.title);
+            results.credits.push(course.credits);
+            results.sec_ids.push(course.sec_id);
+            
         });
+        
+        // for(let i=0; i<results.length; i++){
 
-        return res.status(200).json(result);
+        // }
+
+        return res.status(200).json(results);
     } catch (err) {
+
         return res
             .status(500)
             .json({ message: ' There was an error while fetching department courses. Please try again later.' });
