@@ -3,12 +3,11 @@ const bcrypt = require("bcrypt")
 
 const checkAuth = (req, res, next) => {
   if(req.session.isLoggedin){
-    next()
+    next();
   }
   else{
     return res.status(401).json({ message: 'Failed to authenticate' })
   }
-  console.log(req.originalUrl)
 }
 
 const loginUser = async (req, res) => {
