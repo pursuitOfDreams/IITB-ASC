@@ -10,7 +10,7 @@ const register_course = async (req, res) => {
         const year = result1.rows[0].year;
         const sem = result1.rows[0].semester;
         
-        const { course_id, sec_id, credits } = req.body;
+        const { course_id, sec_id } = req.body;
         const student_id = req.session.uID;
         const grade = '-';
 
@@ -44,13 +44,11 @@ const register_course = async (req, res) => {
 
 const drop_course = async (req, res) => {
     try {
-        const { year, sem } = getCurrentSem()
-        const { course_id, sec_id, credits } = req.body;
+        const { course_id, sec_id, sem , year} = req.body;
         const student_id = req.session.uID;
-        const grade = '-';
 
         const result = await pool.query(
-            "DELETE FROM takes VALUES ($1, $2, $3, $4, $5, null);",
+            "DELETE FROM takes WHERE ID = $1 AND course_id = $2 AND sec_id = $3 AND semester = $4 AND year = $5;",
             [student_id, course_id, sec_id, sem, year]
         )
 
