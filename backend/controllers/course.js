@@ -89,17 +89,34 @@ const getAllRunningCourses = async (req, res) => {
             'SELECT A.course_id as course_id, B.title as title, B.credits as credits, A.sec_id FROM section as A, course as B WHERE A.course_id=B.course_id AND A.year = $1 AND A.semester = $2;',
             [ year, sem]
         )
-        const results = [];
+        const results = {
+            courses : [],
+            courseToSec : {}
+        };
+
         var courseToSecMap = {};
-        runningCourses.rows.forEach((course) => {
+        // with sections
+        for(let i=0;i<runningCourses.rows.length ;i++){
+            let course_id = runningCourses.rows[i].course_id;
+            let sec_id = runningCourses.rows[i].sec_id;
+            results.courseToSec[course_id] = results.courseToSec[course_id] || [];
+            results.courseToSec[course_id].push(sec_id);
+        }
+
+        const runningCourses1 = await pool.query(
+            'SELECT distinct A.course_id as course_id, B.title as title, B.credits as credits FROM section as A, course as B WHERE A.course_id=B.course_id AND A.year = $1 AND A.semester = $2;',
+            [ year, sem]
+        )
+        
+        // without sections 
+        runningCourses1.rows.forEach((course) => {
             let result={}
             result.course_id = course.course_id;
             result.title = course.title;
             result.credits = course.credits;
             result.sec_id = course.sec_id;
-            results.push(result);
+            results.courses.push(result);
         });
-
         
         // for(let i=0; i<results.length; i++){
 
