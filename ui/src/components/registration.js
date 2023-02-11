@@ -44,7 +44,6 @@ function Registration() {
             navigate("/login", {replace:true})
         }
     })
-    const courseToSecMap = {}
     const [ courselist, setcourselist ] = React.useState();
     const [ haveData, sethaveData ] = React.useState(false);
     const [ courseSel, setcourseSel] = React.useState(false);
@@ -53,14 +52,6 @@ function Registration() {
         Axios.get("http://localhost:3001/api/course/currentCourses").then((response) => {
             console.log(response.data)
             setcourselist(response.data)
-            // var obj = response.data
-            // console.log(typeof(response.data))
-            // for(let i=0; i< courselist.course_ids.length;i++){
-            //   let course_id = courselist.course_ids[i];
-            //   let sec_id = courselist.sec_ids[i];
-            //   courseToSecMap[course_id] = courseToSecMap[course_id] || [];
-            //   courseToSecMap[course_id].push(sec_id);
-            // }
             sethaveData(true)
         })
       }, [])

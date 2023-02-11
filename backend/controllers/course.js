@@ -89,21 +89,17 @@ const getAllRunningCourses = async (req, res) => {
             'SELECT A.course_id as course_id, B.title as title, B.credits as credits, A.sec_id FROM section as A, course as B WHERE A.course_id=B.course_id AND A.year = $1 AND A.semester = $2;',
             [ year, sem]
         )
-        const results = {
-            course_ids : [],
-            titles : [],
-            credits : [],
-            sec_ids : []
-        };
+        const results = [];
         var courseToSecMap = {};
         runningCourses.rows.forEach((course) => {
             let result={}
-            results.course_ids.push(course.course_id);
-            results.titles.push(course.title);
-            results.credits.push(course.credits);
-            results.sec_ids.push(course.sec_id);
-            
+            result.course_id = course.course_id;
+            result.title = course.title;
+            result.credits = course.credits;
+            result.sec_id = course.sec_id;
+            results.push(result);
         });
+
         
         // for(let i=0; i<results.length; i++){
 
