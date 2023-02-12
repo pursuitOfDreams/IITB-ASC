@@ -6,7 +6,6 @@ const { getCurrentSem } = require("./utils")
 const getCourseInfo = async (req, res) => {
     try {
         const course_id = req.params.course_id.replace("%20", " ");
-        // console.log(course_id)
         const courseInfo = await pool.query(
             "SELECT course_id, title, dept_name, credits FROM course WHERE course.course_id = $1;",
             [course_id]
@@ -31,7 +30,7 @@ const getCourseInfo = async (req, res) => {
         courseInstructor.rows.forEach((inst) => {
             results.course_instructors.push(inst);
         });
-
+        console.log(results)
         return res.status(200).json(results);
     } catch (err) {
         console.log(err)

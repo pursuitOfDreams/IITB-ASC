@@ -41,7 +41,7 @@ function Course(params) {
             console.log(response.data)
             sethaveData(true);
         },)
-    }, [])
+    }, [course_id])
 
     const prereqs = [
         { course_id: "CS-151" },
@@ -94,7 +94,7 @@ function Course(params) {
                                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                 >
                                                     <TableCell align='center' component="th" scope="row">
-                                                        <Link style={{ textDecoration: "none", color: "black" }} to={`/course/${row.prereq_id}`}>{row.prereq_id}</Link>
+                                                        <Link to={`/course/${row.prereq_id}`}>{row.prereq_id}</Link>
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
