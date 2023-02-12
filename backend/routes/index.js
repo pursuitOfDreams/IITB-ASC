@@ -10,7 +10,6 @@ const router = require("express").Router();
 const { register_course, drop_course } = require("../controllers/registration")
 
 router.use('/auth', (req, res, next) => {
-    console.log('Request URL:', req.originalUrl)
     next()
   }, authRouter);
 router.use('/course',checkAuth, courseRouter);

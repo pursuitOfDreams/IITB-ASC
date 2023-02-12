@@ -145,7 +145,7 @@ const getAllCourses = async (req, res) => {
 
 const getAllDeptCourses = async (req, res) => {
     const deptName = req.params.dept_name;
-    // console.log(deptName)
+
     try {
         
         const courses = await pool.query(

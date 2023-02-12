@@ -55,10 +55,6 @@ const getStudentInfo = async (req, res) => {
 const getStudentInfoParams = async (req, res) => {
     try {
         const sID = req.params.student_id
-        console.log("logged in ",req.session.isLoggedin)
-        console.log("student "+req.session.isStudent)
-        console.log("uID " + req.session.uID)
-        console.log(req.session.isLoggedin && req.session.isStudent && (req.session.uID!=sID))
 
         if(req.session.isLoggedin && req.session.isStudent && (req.session.uID!=sID)){
             return res
