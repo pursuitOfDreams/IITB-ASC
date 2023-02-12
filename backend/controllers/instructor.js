@@ -3,7 +3,6 @@ const pool = require("../db")
 const getDeptInstr = async (req,res) =>{
     try{
         dept_name = req.params.dept_name
-        // console.log('a', dept_name)
         const courseList = await pool.query(
             "select ID, name from instructor where dept_name=$1;",
             [dept_name]
@@ -29,7 +28,7 @@ const getInstructorInfo = async (req, res) => {
         const sem = result.rows[0].semester;
 
         const instructorId = req.params.instructor_id;
-        // console.log(instructorId);
+
         const instructorInfo = await pool.query(
             "SELECT * FROM instructor WHERE ID = $1;", [instructorId]
         )
@@ -38,7 +37,7 @@ const getInstructorInfo = async (req, res) => {
             "SELECT course.course_id as course_id, course.title as title, teaches.semester as sem, teaches.year as year FROM instructor, teaches, course WHERE instructor.ID = teaches.ID AND instructor.ID = $1 AND course.course_id = teaches.course_id AND (teaches.year = $2 AND teaches.semester = $3) ORDER BY year DESC;",
             [instructorId, year, sem]
         )
-        // console.log(instructorInfo)
+
         const instructorPastCourses = await pool.query(
             "SELECT course.course_id as course_id, course.title as title, teaches.semester as sem, teaches.year as year FROM instructor, teaches, course WHERE instructor.ID = teaches.ID AND instructor.ID = $1 AND course.course_id = teaches.course_id AND (teaches.year != $2 OR teaches.semester != $3) ORDER BY year DESC;",
             [instructorId, year, sem]
@@ -48,12 +47,12 @@ const getInstructorInfo = async (req, res) => {
         results.pastCourses = []
         results.currentCourses = []
         instructorPastCourses.rows.forEach((course) => {
-            // console.log(course)
+
             results.pastCourses.push(course);
         });
 
         instructorCurrentCourses.rows.forEach((course) => {
-            // console.log(course)
+
             results.currentCourses.push(course);
         });
         return res

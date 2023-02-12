@@ -1,6 +1,5 @@
 import './App.css';
 import React from 'react';
-import ResponsiveAppBar from './components/navbar';
 import Home from './components/home';
 import InstrDepartments from './components/instructors';
 import Departments from './components/running_courses';
