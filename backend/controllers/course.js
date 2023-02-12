@@ -1,8 +1,5 @@
 const pool = require("../db");
-const { getCurrentSem } = require("./utils")
 
-
-// /course/:course_id
 const getCourseInfo = async (req, res) => {
     try {
         const course_id = req.params.course_id.replace("%20", " ");
@@ -17,7 +14,6 @@ const getCourseInfo = async (req, res) => {
             "SELECT prereq_id FROM prereq WHERE course_id = $1",
             [course_id]
         );
-        // console.log(courseInfo)
         results.course_prereq = [];
         coursePrereq.rows.forEach((prereq) => {
             results.course_prereq.push(prereq);
@@ -30,7 +26,7 @@ const getCourseInfo = async (req, res) => {
         courseInstructor.rows.forEach((inst) => {
             results.course_instructors.push(inst);
         });
-        console.log(results)
+
         return res.status(200).json(results);
     } catch (err) {
         console.log(err)
@@ -133,7 +129,7 @@ const getAllRunningCourses = async (req, res) => {
 const getAllCourses = async (req, res) => {
     try {
         const courses = await pool.query(
-            'SELECT distinct A.course_id as course_id, B.title as title, B.credits as credits FROM section as A, course as B WHERE A.course_id=B.course_id'
+            'SELECT course_id, title from course;'
         )
         const results = {};
         results.courses = courses.rows;
@@ -146,8 +142,32 @@ const getAllCourses = async (req, res) => {
             .json({ message: ' There was an error while fetching department courses. Please try again later.' });
     }
 }
+
+const getAllDeptCourses = async (req, res) => {
+    const deptName = req.params.dept_name;
+    // console.log(deptName)
+    try {
+        
+        const courses = await pool.query(
+            'SELECT course_id, title from course where dept_name = $1;',
+            [deptName]
+        )
+        const results = {};
+        results.courses = courses.rows;
+        
+        return res.status(200).json(results);
+    } catch (err) {
+        console.log(err)
+        return res
+            .status(500)
+            .json({ message: ' There was an error while fetching department courses. Please try again later.' });
+    }
+}
+
 module.exports = {
     getDepartmentCourses,
     getCourseInfo,
-    getAllRunningCourses
+    getAllRunningCourses,
+    getAllCourses,
+    getAllDeptCourses
 }

@@ -8,18 +8,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
-import { padding } from '@mui/system';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import axios from 'axios';
 import ResponsiveAppBar from './navbar';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
@@ -44,7 +42,6 @@ function Registration() {
   const [courseSel, setcourseSel] = React.useState(false);
   const [selCourseId, setSelCourseId] = React.useState();
   const [section, setSection] = React.useState('');
-  const [openSuccess, setOpenSuccess] = React.useState(false);
   const [openError, setOpenError] = React.useState(false);
   const [textError, setTextError] = React.useState('');
 
@@ -171,7 +168,6 @@ function Registration() {
                       </TableCell>
                       <TableCell align="right">
                         <Stack spacing={2} direction="row">
-                          {/* <Button variant="text">Text</Button> */}
                           <Button variant="contained" onClick={(e) => {
                             Axios.post("http://localhost:3001/api/registration", {
                               course_id: selCourseId,
@@ -181,9 +177,6 @@ function Registration() {
                              
                               console.log(response.data)
                               window.location.reload();
-                              // setOpenSuccess(true)
-
-
                             }
                             ).catch((err) => {
                               setTextError(err.response.data.message)
@@ -193,7 +186,6 @@ function Registration() {
                               console.log(err.response.headers);
                             })
                           }}>Register</Button>
-                          {/* <Button variant="outlined">Outlined</Button> */}
                         </Stack>
                       </TableCell>
                     </TableRow>
@@ -207,7 +199,6 @@ function Registration() {
     </div>
   );
 }
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 
 
 export default Registration;

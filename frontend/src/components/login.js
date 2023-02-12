@@ -28,11 +28,12 @@ export default function SignIn() {
   const [userID, setuserID] = useState("");
   const [pass, setPass] = useState("");
 
-  useEffect( () => {
-    if(localStorage.getItem("auth")===true){
-      navigate("/home", {replace: true})
-    }
-  })  
+
+  if(localStorage.getItem("auth")===true){
+    console.log(localStorage.getItem("auth"))
+    navigate("/home", {replace: true})
+  }
+  
 
   const [loginStatus, setloginStatus] = useState("");
   const handleSubmit = (event) => {

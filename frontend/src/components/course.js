@@ -21,7 +21,7 @@ import ResponsiveAppBar from './navbar';
 Axios.defaults.withCredentials = true;
 
 
-function Course(params) {
+function Course() {
     const {course_id} = useParams();
     const navigate = useNavigate();
 
@@ -44,12 +44,6 @@ function Course(params) {
         },)
     }, [course_id])
 
-    const prereqs = [
-        { course_id: "CS-151" },
-        { course_id: "CS-354" },
-        { course_id: "CS-123" },
-        { course_id: "CS-103" },
-    ]
     return (
 
         <div>

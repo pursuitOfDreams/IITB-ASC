@@ -48,7 +48,8 @@ function DeptInstructors() {
 
             <div className="departments">
                 <Box style={{ marginTop: "30px" }}>
-                    {dept_name} Instructors                    <TableContainer component={Paper}>
+                    {dept_name} Instructors                    
+                    <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>

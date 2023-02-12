@@ -21,26 +21,6 @@ import ResponsiveAppBar from './navbar';
 
 Axios.defaults.withCredentials = true;
 
-
-const card = (
-    <React.Fragment>
-        <CardContent>
-            <Typography variant="h5" component="div">
-                Nikhil Manjrekar
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                200050088
-            </Typography>
-            <Typography variant="body2">
-                Computer Science and Engineering
-            </Typography>
-            <Typography component="div">
-                Total credits : 168
-            </Typography>
-        </CardContent>
-    </React.Fragment>
-);
-
 function Home() {
 
     const navigate = useNavigate();
