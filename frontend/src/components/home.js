@@ -128,7 +128,7 @@ function Home() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell align="left" component="th" scope="row">
-                                                            <Link to={`/course/${row.course_id}`}>
+                                                            <Link href={`/course/${row.course_id}`}>
                                                                 {row.course_id}
                                                             </Link>
                                                         </TableCell>
@@ -181,7 +181,9 @@ function Home() {
                                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                             >
                                                                 <TableCell align="left" component="th" scope="row">
-                                                                    {row.course_id}
+                                                                    <Link href={`/course/${row.course_id}`}>
+                                                                        {row.course_id}
+                                                                    </Link>
                                                                 </TableCell>
                                                                 <TableCell >{row.title}</TableCell>
                                                                 <TableCell align="right">{row.sec_id}</TableCell>
