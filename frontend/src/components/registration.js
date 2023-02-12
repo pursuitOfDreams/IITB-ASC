@@ -39,8 +39,7 @@ function Registration() {
   const [haveData, sethaveData] = React.useState(false);
   const [courseSel, setcourseSel] = React.useState(false);
   const [selCourseId, setSelCourseId] = React.useState();
-  const [section, setSection] = React.useState();
-
+  const [section, setSection] = React.useState('');
 
   React.useEffect(() => {
     Axios.get("http://localhost:3001/api/course/currentCourses").then((response) => {
