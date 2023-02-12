@@ -24,6 +24,24 @@ const getDepartments = async (req, res) => {
     }
 }
 
+const getAllDepts = async (req, res) => {
+    try {
+        const courses = await pool.query(
+            'SELECT dept_name from department;'
+        )
+        const results = {};
+        results.courses = courses.rows;
+        
+        return res.status(200).json(results);
+    } catch (err) {
+
+        return res
+            .status(500)
+            .json({ message: ' There was an error while fetching department courses. Please try again later.' });
+    }
+}
+
 module.exports = {
     getDepartments,
+    getAllDepts
 }

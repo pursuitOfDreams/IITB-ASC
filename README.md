@@ -31,6 +31,9 @@ All the instructor related apis
 - localhost:3001/api/instructor/instrDept : This API is used to list all the departments in the frontend
 - localhost:3001/api/instructor/:instructor_id : This API is used to get information about a specific instructor (instructor_id)
 
+To get list of all departments:
+- localhost:3001/api/departments : This can be used as an endpoint API to get list of all the API
+
 To get the list of department instructors
 - localhost:3001/api/dept_instructors/:dept_name : This API is used to get all the instructors of a particular department
 

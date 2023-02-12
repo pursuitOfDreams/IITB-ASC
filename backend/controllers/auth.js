@@ -24,7 +24,7 @@ const loginUser = async (req, res) => {
       const passwordValid = await bcrypt.compare(password, user_password);
 
       if (!passwordValid) {
-        return res.status(401).json("Password or userID is Incorrect.");
+        return res.status(401).json({message : "Password or userID is Incorrect."});
       }
       
       req.session.isLoggedin = true
@@ -45,7 +45,7 @@ const loginUser = async (req, res) => {
 
   
     if (student_user_credentials.rows.length == 0 && instructor_user_credentials.rows.length == 0) {
-      return res.status(401).json("Password or username is incorrect, please reenter");
+      return res.status(401).json({message :"Password or username is incorrect, please reenter"});
     }
 
     
@@ -56,7 +56,7 @@ const loginUser = async (req, res) => {
     const passwordValid = await bcrypt.compare(password, user_password);
 
     if (!passwordValid) {
-      return res.status(401).json("Password or userID is Incorrect.");
+      return res.status(401).json({message :"Password or userID is Incorrect."});
     }
 
     req.session.isLoggedin = true
@@ -71,7 +71,7 @@ const loginUser = async (req, res) => {
 
   } catch (err) {
     console.log(err)
-    return res.status(500).send('Server Error');
+    return res.status(500).json({message : 'Server Error'});
   }
 }
 

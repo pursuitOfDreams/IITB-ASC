@@ -2,6 +2,14 @@ const pool = require("../db");
 
 const getCourseInfo = async (req, res) => {
     try {
+        var today = new Date();
+        const result = await pool.query(
+            "SELECT * FROM reg_dates WHERE start_time <= $1  ORDER BY start_time DESC;",
+            [today]
+        );
+        const year = result.rows[0].year;
+        const sem = result.rows[0].semester;
+
         const course_id = req.params.course_id.replace("%20", " ");
         const courseInfo = await pool.query(
             "SELECT course_id, title, dept_name, credits FROM course WHERE course.course_id = $1;",
@@ -14,18 +22,24 @@ const getCourseInfo = async (req, res) => {
             "SELECT prereq_id FROM prereq WHERE course_id = $1",
             [course_id]
         );
+
         results.course_prereq = [];
         coursePrereq.rows.forEach((prereq) => {
             results.course_prereq.push(prereq);
         });
-        const courseInstructor = await pool.query(
-            "SELECT distinct(ID), name, dept_name, semester, year FROM teaches as T NATURAL JOIN instructor as I WHERE course_id = $1;",
-            [course_id]
+
+        const currentInstructor = await pool.query(
+            "SELECT distinct(ID), name, dept_name, semester, year, sec_id FROM teaches as T NATURAL JOIN instructor as I WHERE course_id = $1 AND year = $2 AND semester = $3;",
+            [course_id, year, sem]
         )
         results.course_instructors = [];
-        courseInstructor.rows.forEach((inst) => {
-            results.course_instructors.push(inst);
-        });
+
+        const pastInstructor = await pool.query(
+            "SELECT distinct(ID), name, dept_name, semester, year, sec_id FROM teaches as T NATURAL JOIN instructor as I WHERE course_id = $1 AND (year != $2 OR semester != $3);",
+            [course_id, year, sem]
+        )
+        results.current_instructors = currentInstructor.rows;
+        results.past_instructors = pastInstructor.rows;
 
         return res.status(200).json(results);
     } catch (err) {

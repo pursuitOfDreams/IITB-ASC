@@ -106,7 +106,7 @@ function Course() {
                 <Grid container spacing={2}>
                     <Grid style={{ marginTop: "50px" }} xs={12}>
                         <Box style={{ paddingLeft: "30px", paddingRight: "30px" }}>
-                            Instructors
+                            Current Instructors
                             <TableContainer component={Paper}>
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                     <TableHead>
@@ -114,12 +114,13 @@ function Course() {
                                             <TableCell>ID</TableCell>
                                             <TableCell align="right">Name</TableCell>
                                             <TableCell align="right">Department</TableCell>
+                                            <TableCell align="right">Section</TableCell>
                                             <TableCell align="right">Semester</TableCell>
                                             <TableCell align="right">Year</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {coursedat.course_instructors.map((row) => (
+                                        {coursedat.current_instructors.map((row) => (
                                             <TableRow
                                                 key={row.id}
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -129,6 +130,43 @@ function Course() {
                                                 </TableCell>
                                                 <TableCell align="right">{row.name}</TableCell>
                                                 <TableCell align="right">{row.dept_name}</TableCell>
+                                                <TableCell align="right">{row.sec_id}</TableCell>
+                                                <TableCell align="right">{row.semester}</TableCell>
+                                                <TableCell align="right">{row.year}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Box>
+                    </Grid>
+                    <Grid style={{ marginTop: "50px" }} xs={12}>
+                        <Box style={{ paddingLeft: "30px", paddingRight: "30px" }}>
+                            Past Instructors
+                            <TableContainer component={Paper}>
+                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>ID</TableCell>
+                                            <TableCell align="right">Name</TableCell>
+                                            <TableCell align="right">Department</TableCell>
+                                            <TableCell align="right">Section</TableCell>
+                                            <TableCell align="right">Semester</TableCell>
+                                            <TableCell align="right">Year</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {coursedat.past_instructors.map((row) => (
+                                            <TableRow
+                                                key={row.id}
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    <Link to={`/instructor/${row.id}`}>{row.id}</Link>
+                                                </TableCell>
+                                                <TableCell align="right">{row.name}</TableCell>
+                                                <TableCell align="right">{row.dept_name}</TableCell>
+                                                <TableCell align="right">{row.sec_id}</TableCell>
                                                 <TableCell align="right">{row.semester}</TableCell>
                                                 <TableCell align="right">{row.year}</TableCell>
                                             </TableRow>
