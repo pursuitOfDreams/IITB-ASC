@@ -17,6 +17,7 @@ import { Navigate } from 'react-router-dom'
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button';
+import ResponsiveAppBar from './navbar';
 
 Axios.defaults.withCredentials = true;
 
@@ -64,11 +65,12 @@ function Home() {
 
     return (
         <div>
+            <ResponsiveAppBar />
             {
                 !haveData
                     ? <div> Loading ... </div>
                     :
-                    <div className="Home" >
+                    <div className="Home" style={{marginTop : "100px"}}>
                         <Grid container spacing={2}>
                             <Grid xs={3}>
                                 <Box style={{ paddingLeft: "30px", paddingRight: "30px" }}>
@@ -115,10 +117,10 @@ function Home() {
                                                 <TableRow>
                                                     <TableCell align="left">Course ID</TableCell>
                                                     <TableCell>Course Name</TableCell>
-                                                    <TableCell align="right">Section</TableCell>
-                                                    <TableCell align="right">Semester</TableCell>
-                                                    <TableCell align="right">Year</TableCell>
-                                                    <TableCell align="right">Grade</TableCell>
+                                                    <TableCell align="left">Section</TableCell>
+                                                    <TableCell align="left">Semester</TableCell>
+                                                    <TableCell align="left">Year</TableCell>
+                                                    <TableCell align="left">Grade</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -133,10 +135,10 @@ function Home() {
                                                             </Link>
                                                         </TableCell>
                                                         <TableCell >{row.title}</TableCell>
-                                                        <TableCell align="right">{row.sec_id}</TableCell>
-                                                        <TableCell align="right">{row.semester}</TableCell>
-                                                        <TableCell align="right">{row.year}</TableCell>
-                                                        <TableCell align="right">
+                                                        <TableCell align="left">{row.sec_id}</TableCell>
+                                                        <TableCell align="left">{row.semester}</TableCell>
+                                                        <TableCell align="left">{row.year}</TableCell>
+                                                        <TableCell align="left">
                                                             <Button variant="outlined" color="error" onClick={(e) => {
                                                                 Axios.post("http://localhost:3001/api/drop_course", {
                                                                     course_id: row.course_id,

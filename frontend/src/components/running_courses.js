@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { Link,useNavigate } from "react-router-dom";
 import Axios from "axios";
+import ResponsiveAppBar from './navbar';
 
 Axios.defaults.withCredentials = true;
 
@@ -38,7 +39,7 @@ function Departments() {
 
     return (
         <div>
-
+        <ResponsiveAppBar />
         <div className="departments">
         {
                 !haveData 

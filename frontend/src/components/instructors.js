@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import { Link , useNavigate} from "react-router-dom";
 import axios from "axios"
 import { useEffect } from "react";
-
+import ResponsiveAppBar from './navbar';
 
 axios.defaults.withCredentials = true;
 
@@ -40,7 +40,7 @@ function InstrDepartments() {
 
     return (
         <div>
-
+        <ResponsiveAppBar />
         <div className="DeptInstructors">
             {
                 !haveData 

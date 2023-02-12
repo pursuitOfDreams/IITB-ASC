@@ -17,7 +17,6 @@ import Registration from './components/registration';
 function App() {
   return (
     <div className="App">
-      <ResponsiveAppBar />
       <Routes>
         <Route path='/login' element= {<SignIn />} />
         <Route path='/logout' element= {<SignOut />} />
