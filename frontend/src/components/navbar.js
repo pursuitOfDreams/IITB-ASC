@@ -40,8 +40,8 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
+    <AppBar position="fixed" style={{backgroundColor : "#161b22"}}>
+      <Container maxWidth="xl" >
         <Toolbar disableGutters>
           <Typography
             variant="h6"
@@ -64,7 +64,7 @@ function ResponsiveAppBar() {
 
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }} style={{padding : "0px", margin : "0px 40px"}}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -130,6 +130,7 @@ function ResponsiveAppBar() {
                 key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
+                style={{}}
               >
                 {page==="courses" && <Link style = {{ textDecoration : "none", color : "white"}} to="/course/running"> {page} </Link>}
                 {page==="instructor" && <Link style = {{ textDecoration : "none", color : "white"}} to="/departments"> {page} </Link>}
@@ -138,7 +139,7 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0 }} style={{marginRight : "20px"}}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

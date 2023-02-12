@@ -61,7 +61,7 @@ function Registration() {
             :
             <div>
               <Box style={{ marginTop: "20px", padding: '0px 50px' }}>
-                Course Registration
+                <div style={{fontSize : "30px"}}>Course Registration</div>
 
                 <Stack spacing={2} sx={{ width: '100%' }} style={{ marginTop: "50px" }}>
                   <Autocomplete
