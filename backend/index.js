@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({path : "./config.txt"})
 
 const express = require('express');
 const sessions = require('express-session');
