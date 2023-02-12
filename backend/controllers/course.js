@@ -131,6 +131,22 @@ const getAllRunningCourses = async (req, res) => {
     }
 }
 
+const getAllCourses = async (req, res) => {
+    try {
+        const courses = await pool.query(
+            'SELECT distinct A.course_id as course_id, B.title as title, B.credits as credits FROM section as A, course as B WHERE A.course_id=B.course_id'
+        )
+        const results = {};
+        results.courses = courses.rows;
+        
+        return res.status(200).json(results);
+    } catch (err) {
+
+        return res
+            .status(500)
+            .json({ message: ' There was an error while fetching department courses. Please try again later.' });
+    }
+}
 module.exports = {
     getDepartmentCourses,
     getCourseInfo,
