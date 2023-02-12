@@ -15,6 +15,5 @@ router.get('/currentCourses', getAllRunningCourses);
 router.get('/running', getDepartments);
 router.get('/running/:dept_id', getDepartmentCourses)
 router.get('/:course_id/', getCourseInfo);
-router.get('/registration_courses/', getAllRunningCourses)
 
 module.exports = router;
