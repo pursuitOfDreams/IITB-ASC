@@ -125,7 +125,7 @@ function Course() {
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                             >
                                                 <TableCell component="th" scope="row">
-                                                    <Link style={{textDecoration: "none", color : "black"}} to={`/instructor/${row.id}`}>{row.id}</Link>
+                                                    <Link to={`/instructor/${row.id}`}>{row.id}</Link>
                                                 </TableCell>
                                                 <TableCell align="right">{row.name}</TableCell>
                                                 <TableCell align="right">{row.dept_name}</TableCell>
