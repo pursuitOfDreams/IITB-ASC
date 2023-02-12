@@ -20,18 +20,22 @@ const register_course = async (req, res) => {
         )
 
         if (prereqInfo.rows.length != 0) {
-            return res.status(500).json({ message: "prereq criteria not satisfied" });
+            return res.status(500).json({ message: "Prereq criteria not satisfied" });
         }
 
+        const alreadyPresent = await pool.query(
+            "SELECT * FROM takes WHERE ID = $1 and course_id = $2 and sec_id = $3 and semester = $4 and year = $5",
+            [student_id, course_id, sec_id, sem, year]
+        )
+
+        if (alreadyPresent.rows.length !=0 ){
+            return res.status(400).json({ message: "Course already registered" });
+        }
+        
         const result = await pool.query(
             "INSERT INTO takes VALUES ($1, $2, $3, $4, $5, null);",
             [student_id, course_id, sec_id, sem, year]
         )
-
-        // result = await pool.query(
-        //     "UPDATE student SET tot_cred = tot_cred + $1 WHERE ID = $2",
-        //     [total_credits, student_id]
-        // )
 
         return res.status(200).json({ message: "Course was registered" })
 
