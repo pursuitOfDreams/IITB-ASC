@@ -18,9 +18,9 @@ const register_course = async (req, res) => {
             "(SELECT prereq_id FROM prereq WHERE course_id = $1) EXCEPT (SELECT course_id FROM takes WHERE ID = $2);",
             [course_id, student_id]
         )
-
+        
         if (prereqInfo.rows.length != 0) {
-            return res.status(500).json({ message: "Prereq criteria not satisfied" });
+            return res.status(400).json({ message: "Prereq criteria not satisfied" });
         }
 
         const alreadyPresent = await pool.query(
@@ -31,6 +31,16 @@ const register_course = async (req, res) => {
         if (alreadyPresent.rows.length !=0 ){
             return res.status(400).json({ message: "Course already registered" });
         }
+
+        const timeSlotCheck = await pool.query(
+            "select * from section natural join takes WHERE id = $1 and year = $2 and semester =$3 AND time_Slot_id IN ( SELECT time_slot_id FROM section WHERE course_id = $4 AND sec_id = $5 );",
+            [student_id, year, sem, course_id, sec_id]
+        )
+
+        if (timeSlotCheck.rows.length !=0) {
+            return res.status(400).json({ message : "time slot clash with course " + timeSlotCheck.rows[0].course_id});
+        }
+        
         
         const result = await pool.query(
             "INSERT INTO takes VALUES ($1, $2, $3, $4, $5, null);",
