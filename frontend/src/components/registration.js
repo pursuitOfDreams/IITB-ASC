@@ -38,8 +38,8 @@ function Registration() {
   const [haveData, sethaveData] = React.useState(false);
   const [courseSel, setcourseSel] = React.useState(false);
   const [selCourseId, setSelCourseId] = React.useState();
-  // const [section, setSection] = React.useState('');
-  var section = "";
+  const [section, setSection] = React.useState();
+  // var section = "";
 
 
   React.useEffect(() => {
@@ -124,10 +124,8 @@ function Registration() {
                               value={section}
                               label="section"
                               onChange={(e) => {
-                                section = e.target.value
-                                // setSection(e.target.value)
-                                console.log(section)
-                                // setcourseSel(true)
+                                setSection(e.target.value)
+                                console.log(e.target.value)
                               }
                               }
                             >
