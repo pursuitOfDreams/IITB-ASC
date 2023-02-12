@@ -16,6 +16,7 @@ import {Link,useNavigate} from "react-router-dom";
 import Axios from "axios";
 import {useState, useEffect} from "react";
 import {useParams} from "react-router"
+import ResponsiveAppBar from './navbar';
 
 Axios.defaults.withCredentials = true;
 
@@ -45,6 +46,7 @@ function Instructor() {
 
     return (
         <div>
+            <ResponsiveAppBar />
             {
                 !haveData ? <div> Loading.. </div>
                 :

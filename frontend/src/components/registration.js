@@ -20,6 +20,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import ResponsiveAppBar from './navbar';
 
 Axios.defaults.withCredentials = true;
 
@@ -38,8 +39,8 @@ function Registration() {
   const [haveData, sethaveData] = React.useState(false);
   const [courseSel, setcourseSel] = React.useState(false);
   const [selCourseId, setSelCourseId] = React.useState();
-  const [section, setSection] = React.useState();
-  // var section = "";
+  // const [section, setSection] = React.useState('');
+  var section = "";
 
 
   React.useEffect(() => {
@@ -52,7 +53,7 @@ function Registration() {
 
   return (
     <div>
-
+      <ResponsiveAppBar />
       <div className="departments">
         {
           !haveData
@@ -94,7 +95,7 @@ function Registration() {
         {
           courseSel ?
             <TableContainer component={Paper} style={{ marginTop: "50px" }}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                 <TableHead>
                   <TableRow>
                     <TableCell align="left">Course ID</TableCell>
@@ -124,8 +125,10 @@ function Registration() {
                               value={section}
                               label="section"
                               onChange={(e) => {
-                                setSection(e.target.value)
-                                console.log(e.target.value)
+                                section = e.target.value
+                                // setSection(e.target.value)
+                                console.log(section)
+                                // setcourseSel(true)
                               }
                               }
                             >

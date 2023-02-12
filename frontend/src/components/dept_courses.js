@@ -12,6 +12,8 @@ import { Link,useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import Axios from "axios";
+import ResponsiveAppBar from './navbar';
+
 Axios.defaults.withCredentials = true;
 
 
@@ -42,6 +44,7 @@ function DepartmentCourses() {
     
     return (
         <div>
+            <ResponsiveAppBar />
             {
                 !haveData ? <div> Loading.. </div>
                 : 
