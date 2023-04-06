@@ -92,6 +92,8 @@ function Instructor() {
                                                 <TableRow>
                                                     <TableCell>CourseID</TableCell>
                                                     <TableCell >Course name</TableCell>
+                                                    <TableCell >Semester</TableCell>
+                                                    <TableCell >Year</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -104,6 +106,8 @@ function Instructor() {
                                                             <Link to={`/course/${row.course_id}`}>{row.course_id}</Link>
                                                         </TableCell>
                                                         <TableCell>{row.title}</TableCell>
+                                                        <TableCell>{row.sem}</TableCell>
+                                                        <TableCell>{row.year}</TableCell>
                                                     </TableRow>
                                                 ))}
                                             </TableBody>
@@ -118,6 +122,8 @@ function Instructor() {
                                                 <TableRow>
                                                     <TableCell>CourseID</TableCell>
                                                     <TableCell >Course name</TableCell>
+                                                    <TableCell >Semester</TableCell>
+                                                    <TableCell >Year</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -130,6 +136,8 @@ function Instructor() {
                                                             <Link to={`/course/${row.course_id}`}>{row.course_id}</Link>
                                                         </TableCell>
                                                         <TableCell>{row.title}</TableCell>
+                                                        <TableCell>{row.sem}</TableCell>
+                                                        <TableCell>{row.year}</TableCell>
                                                     </TableRow>
                                                 ))}
                                             </TableBody>

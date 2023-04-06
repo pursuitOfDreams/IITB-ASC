@@ -28,12 +28,25 @@ const getStudentInfo = async (req, res) => {
             "SELECT takes.course_id, title, sec_id, semester, year, grade FROM takes, course WHERE ID = $1 and course.course_id=takes.course_id and (takes.year != $2 OR takes.semester != $3) ORDER BY year DESC, semester asc;",
             [student_id, year, sem]
         )
+
+        var sems ={}
+        sems["Spring"] =0
+        sems["Summer"] =1
+        sems["Fall"] =2
+        sems["Winter"] =3
+        var pastCourses = studentPastCourses.rows.sort((a, b) => {
+            if (a.year!=b.year)
+             return b.year - a.year;
+            
+             return sems[b.semester] - sems[a.semester];
+        })
         
         studentCurrentCourses.rows.forEach((course) => {
             results.currentCourses.push(course)
         })
         var semToCourse = {}
-        studentPastCourses.rows.forEach((course) => {
+
+        pastCourses.forEach((course) => {
             let sem = course.semester + "  " + course.year;
             semToCourse[sem] = semToCourse[sem] || []
             semToCourse[sem].push(course)

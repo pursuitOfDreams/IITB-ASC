@@ -42,11 +42,25 @@ const getInstructorInfo = async (req, res) => {
             "SELECT course.course_id as course_id, course.title as title, teaches.semester as sem, teaches.year as year FROM instructor, teaches, course WHERE instructor.ID = teaches.ID AND instructor.ID = $1 AND course.course_id = teaches.course_id AND (teaches.year != $2 OR teaches.semester != $3) ORDER BY year DESC;",
             [instructorId, year, sem]
         )
+
+        var sems ={}
+        sems["Spring"] =0
+        sems["Summer"] =1
+        sems["Fall"] =2
+        sems["Winter"] =3
+        var pastCourses = instructorPastCourses.rows.sort((a, b) => {
+            if (a.year!=b.year)
+             return b.year - a.year;
+            
+             return sems[b.sem] - sems[a.sem];
+        })
+        
         var results = {};
         results.instructorInfo = instructorInfo.rows;
         results.pastCourses = []
         results.currentCourses = []
-        instructorPastCourses.rows.forEach((course) => {
+
+        pastCourses.forEach((course) => {
 
             results.pastCourses.push(course);
         });
